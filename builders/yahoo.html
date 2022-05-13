@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../css/builder-style.css">
+</head>
+<body>
+
+	<script src="../js/builder.js"></script>
+
+	<div class="help-button" onclick="getHelp()"></div>
+
+	<div class="help-popup" id="help-popup">
+		<div class="help-popup-header">
+			<div class="close-button" onclick="closeHelp()"></div>
+		</div>
+		<div class="help-popup-container">
+			Yahoo Gemini does not have a designated place to paste a tracking suffix or template, instead, you should place the entire target URL with the tracking parameters at the end:
+			<br><br>
+			<img src="../img/yahoo-gemini-url.jpg" width="100%">
+			<br>
+			<i>(This is just an example for visualization purpose, not the actual tracking suffix)</i>
+		</div>
+	</div>
+
+	<div class="builder-title">
+		Yahoo Gemini UTM Builder
+	</div>
+
+	<div class="builder-container">
+		<table class="fields-table">
+			<tr>
+				<td class="td-label"><span class="field-label">Target URL:</span></td>
+				<td class="td-input"><input id="url" placeholder="https://www.example.com/" type="text" name="array[]" class="field-input"></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_source:</span></td>
+				<td class="td-input"><input id="utm_source" value="yahoo_gemini" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_medium:</span></td>
+				<td class="td-input"><input id="utm_medium" value="paid_media" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_campaign:</span></td>
+				<td class="td-input"><input id="utm_campaign" value="{campaignname}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">campaign_id:</span></td>
+				<td class="td-input"><input id="campiagn_id" value="{campaignid}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_content:</span></td>
+				<td class="td-input"><input id="utm_content" value="{adgroupname}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">adset_id:</span></td>
+				<td class="td-input"><input id="adset_id" value="{adgroupid}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_ad:</span></td>
+				<td class="td-input"><input id="utm_ad" value="{adid}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">ad_id:</span></td>
+				<td class="td-input"><input id="ad_id" value="{adid}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_term:</span></td>
+				<td class="td-input"><input id="utm_term" value="{keyword}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">matchtype:</span></td>
+				<td class="td-input"><input id="matchtype" value="{matchtype}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">placement:</span></td>
+				<td class="td-input"><input id="placement" value="${supply_name}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">device:</span></td>
+				<td class="td-input"><input id="device" value="{device}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">network:</span></td>
+				<td class="td-input"><input id="network" value="{network}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">vmcid:</span></td>
+				<td class="td-input"><input id="vmcid" value="${CC}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+		</table>
+
+		<br><button onclick="generateUTM()" class="generate-button" id="generate-button">Generate UTM and Copy!</button>
+		<br><br>
+		<textarea class="field-output restricted-input" type="text" name="output" placeholder="Your tracking suffix will be generated here." readonly></textarea>
+	</div>
+</body>
+</html>

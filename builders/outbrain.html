@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../css/builder-style.css">
+</head>
+<body>
+
+	<script src="../js/builder.js"></script>
+
+	<div class="help-button" onclick="getHelp()"></div>
+
+	<div class="help-popup" id="help-popup">
+		<div class="help-popup-header">
+			<div class="close-button" onclick="closeHelp()"></div>
+		</div>
+		<div class="help-popup-container">
+			In the side menu, go to "Account Settings" and paste your tracking suffix here:
+			<br><br>
+			<img src="../img/outbrain-tracking-suffix.jpg" width="100%">
+			<br>
+			<i>(This is just an example for visualization purpose, not the actual tracking suffix)</i>
+		</div>
+	</div>
+
+	<div class="builder-title">
+		Outbrain UTM Builder
+	</div>
+
+	<div class="builder-container">
+		<table class="fields-table">
+			<tr>
+				<td class="td-label"><span class="field-label">utm_source:</span></td>
+				<td class="td-input"><input id="utm_source" value="outbrain" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_medium:</span></td>
+				<td class="td-input"><input id="utm_medium" value="discovery" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_campaign:</span></td>
+				<td class="td-input"><input id="utm_campaign" value="{{campaign_name}}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">campaign_id:</span></td>
+				<td class="td-input"><input id="campiagn_id" value="{{campaign_id}}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_content:</span></td>
+				<td class="td-input"><input id="utm_content" value="{{publisher_name}}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">adset_id:</span></td>
+				<td class="td-input"><input id="adset_id" value="{{publisher_id}}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">utm_ad:</span></td>
+				<td class="td-input"><input id="utm_ad" value="{{ad_title}}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">ad_id:</span></td>
+				<td class="td-input"><input id="ad_id" value="{{aid}}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">placement:</span></td>
+				<td class="td-input"><input id="placement" value="{{section_name}}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+			<tr>
+				<td class="td-label"><span class="field-label">obcid:</span></td>
+				<td class="td-input"><input id="obcid" value="{{ob_click_id}}" type="text" name="array[]" class="field-input restricted-input" readonly></td>
+			</tr>
+		</table>
+
+		<br><button onclick="generateUTM()" class="generate-button" id="generate-button">Generate UTM and Copy!</button>
+		<br><br>
+		<textarea class="field-output restricted-input" type="text" name="output" placeholder="Your tracking suffix will be generated here." readonly></textarea>
+	</div>
+</body>
+</html>

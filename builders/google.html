@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../css/builder-style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/default.min.css">
+	<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+	<script src="../js/builder.js"></script>
+
+	<div class="help-button" onclick="getHelp()"></div>
+
+	<div class="help-popup" id="help-popup">
+		<div class="help-popup-header">
+			<div class="close-button" onclick="closeHelp()"></div>
+		</div>
+		<div class="help-popup-container">
+			Since Google ads won't include "Campaign Name" and "Ad Group Name" in their <a href="https://support.google.com/google-ads/answer/6305348?hl=en" target="_new">ValueTrack parameters</a>, we wrote this Google script to do it for us.
+			<br>Every hour, this script will itterate through all of the Ad Groups in the account, copy their Campaign Name and Ad Group Name, and include it inside a pre-made suffix template.
+			<br>Then, it will place that suffix in the Ad Group's tracking settings under "Tracking Suffix".
+			<br><br>If you're not sure how to implement this, visit the article we wrote at <a href="https://trackingchef.com/google-ads/google-ads-dynamic-tracking-template/" target="_new">TrackingChef.com</a>
+			<br><br><b>Please notice:</b> currently, this script only works for Search and Display campaigns.
+			<br>If it doesn't work for any of your other campaigns, you will need to implement your UTM suffix manually.
+		</div>
+	</div>
+
+	<div class="builder-title">
+		Google Ads UTM Builder
+	</div>
+
+	<div class="builder-container">
+		<button onclick="copyGoogleScript()" class="generate-button" id="generate-button">Copy this script!</button>
+		<pre><code class="language-js" id="google_script">function  main() {
+	var SuffixTemplate="utm_source=google&utm_medium=cpc&utm_campaign={CampaignName}&utm_content={AdGroupName}&utm_ad={creative}&utm_term={keyword}&matchtype={matchtype}&device={device}&GeoLoc={loc_physical_ms}&placement={placement}&network={network}&campaign_id={campaignid}&adset_id={adgroupid}&ad_id={creative}";
+
+	var _CAMPAIGN_CONTAINS="";               //Filter by Campaign name   
+	var _ADGROUP_CONTAINS="";               //Filter by Adgroup name 
+	var STATUS="ENABLED";                    //ENABLED, PAUSED
+
+	if (SuffixTemplate.search(/{AdGroupName}|{CampaignName}/g)==-1) {
+		Logger.log("Enter at least one of the {CampaignName} or {AdGroupName} parameter in the tracking template");
+		return
+	}   
+	if (SuffixTemplate.search("{CampaignName}")>0&&SuffixTemplate.search("{AdGroupName}")==-1) {
+		var campaignIterator=_CAMPAIGN_CONTAINS==""?AdsApp.campaigns().withCondition("Status = "+STATUS).get():AdsApp.campaigns().withCondition("Name contains '"+_CAMPAIGN_CONTAINS+"'").withCondition("Status = "+STATUS).get();
+		if (!campaignIterator.hasNext()) {
+			Logger.log("No Campaigns matched with this condition");
+			return
+		}
+		while (campaignIterator.hasNext()) {  
+			var campaign=campaignIterator.next(); 
+			var campaigntemplate=SuffixTemplate.replace(/{CampaignName}/g,campaign.getName().replace(/\s/g,'%20'))
+			campaign.urls().setFinalUrlSuffix(campaigntemplate);
+			Logger.log(campaign.getName()+" => "+campaigntemplate)  
+		}
+	}
+	if (SuffixTemplate.search("{AdGroupName}")>0) {
+		var adgroupIterator = {hasNext:function(){return false}}  
+		if (_ADGROUP_CONTAINS==""&&_CAMPAIGN_CONTAINS=="") {
+			adgroupIterator=AdsApp.adGroups().withCondition("Status = "+STATUS).get();
+		} else if (_ADGROUP_CONTAINS==""&&_CAMPAIGN_CONTAINS!=="") {
+			adgroupIterator=AdsApp.adGroups().withCondition("CampaignName contains '"+_CAMPAIGN_CONTAINS+"'").withCondition("Status = "+STATUS).get();
+		} else if (_ADGROUP_CONTAINS!==""&&_CAMPAIGN_CONTAINS!=="") {
+			adgroupIterator=AdsApp.adGroups().withCondition("CampaignName contains '"+_CAMPAIGN_CONTAINS+"'").withCondition("Name contains '"+_ADGROUP_CONTAINS+"'").withCondition("Status = "+STATUS).get();
+		} else if (_ADGROUP_CONTAINS!==""&&_CAMPAIGN_CONTAINS=="") {
+			adgroupIterator=AdsApp.adGroups().withCondition("Name contains '"+_ADGROUP_CONTAINS+"'").withCondition("Status = "+STATUS).get();
+		}
+
+		if (!adgroupIterator.hasNext()) {
+			Logger.log("No Campaigns/Adgroups matched with this condition");return
+		}
+		while (adgroupIterator.hasNext()) {   
+		    var adgroup=adgroupIterator.next();
+			var adgrouptemplate=SuffixTemplate.replace(/{AdGroupName}/g,adgroup.getName().replace(/\s/g,'%20'))
+			if (SuffixTemplate.search("{CampaignName}")>0) {
+				adgrouptemplate=adgrouptemplate.replace(/{CampaignName}/g,adgroup.getCampaign().getName().replace(/\s/g,'%20'))
+			}
+			adgroup.urls().setFinalUrlSuffix(adgrouptemplate);
+			Logger.log(adgroup.getCampaign().getName()+" => "+adgroup.getName()+" => "+adgrouptemplate)
+  		}
+	}
+}
+
+
+
+</code></pre>
+	</div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+body {
+	margin: 0;
+	padding-left: 75px;
+}
+
+.builder-title {
+	display: flex;
+	width: 100%;
+	height: 12vh;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	font-size: 40px;
+}
+
+.builder-container {
+	height: 88vh;
+	display: flex;
+	flex-direction: column;
+	padding-right: 30%;
+	padding-left: 30%;
+	flex-wrap: nowrap;
+	align-items: center;
+}
+
+.td-input {
+	width: 300px;
+}
+
+.restricted-input {
+	cursor: not-allowed;
+	background-color: #BDBDBD;
+}
+
+.field-input {
+	width: 100%;
+}
+
+.generate-button {
+	width: 100%;
+	height: 50px;
+	font-size: 25px;
+	cursor: pointer;
+}
+
+.field-output {
+	width: 100%;
+	height: 130px;
+	line-break: strict;
+	text-align: center;
+}
+
+.field-output::placeholder {
+	line-height: 130px;
+}
+
+.help-button {
+	position: fixed;
+	right: 20px;
+	top: 20px;
+	width: 40px;
+	height: 40px;
+	background-image: url("../img/help-icon.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	cursor: pointer;
+	transition-duration: 300ms;
+}
+
+.help-button:hover {
+	opacity: 50%;
+}
+
+.close-button {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background-image: url(../img/close-button.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	cursor: pointer;
+	transition-duration: 300ms;
+}
+
+.close-button:hover {
+	opacity: 50%;
+}
+
+.help-popup {
+	display: none;
+	position: fixed;
+	right: 0;
+	width: 30%;
+	height: 100%;
+	background-color: #E0E0E0;
+	padding: 20px 20px 20px 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.help-popup-header {
+	width: 100%;
+	text-align: right;
+}
+
+.help-popup-container {
+	width: 90%;
+	text-align: left;
+}
+
+.red-border {
+	border-color: red;
+}
+
+.green-border {
+	border-color: #32bd00;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+pre {
+	white-space:pre-wrap; word-wrap:break-word;
+	width: 200%;
+}

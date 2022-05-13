@@ -1,0 +1,44 @@
+function  main() {
+  var SuffixTemplate="utm_source=google&utm_medium=cpc&utm_campaign={CampaignName}&utm_content={AdGroupName}&utm_ad={creative}&utm_term={keyword}&matchtype={matchtype}&device={device}&GeoLoc={loc_physical_ms}&placement={placement}&network={network}&campaign_id={campaignid}&adset_id={adgroupid}&ad_id={creative}";
+
+var _CAMPAIGN_CONTAINS="";               //Filter by Campaign name   
+var _ADGROUP_CONTAINS="";               //Filter by Adgroup name 
+var STATUS="ENABLED";                    //ENABLED, PAUSED
+
+if(SuffixTemplate.search(/{AdGroupName}|{CampaignName}/g)==-1){Logger.log("Enter at least one of the {CampaignName} or {AdGroupName} parameter in the tracking template");return}   
+if(SuffixTemplate.search("{CampaignName}")>0&&SuffixTemplate.search("{AdGroupName}")==-1)
+{
+  var campaignIterator=_CAMPAIGN_CONTAINS==""?AdsApp.campaigns().withCondition("Status = "+STATUS).get():AdsApp.campaigns().withCondition("Name contains '"+_CAMPAIGN_CONTAINS+"'").withCondition("Status = "+STATUS).get();
+
+  if(!campaignIterator.hasNext()){Logger.log("No Campaigns matched with this condition");return}
+  while(campaignIterator.hasNext())
+  {  
+    var campaign=campaignIterator.next(); 
+    var campaigntemplate=SuffixTemplate.replace(/{CampaignName}/g,campaign.getName().replace(/\s/g,'%20'))
+    campaign.urls().setFinalUrlSuffix(campaigntemplate);
+    Logger.log(campaign.getName()+" => "+campaigntemplate)  
+  }
+}  
+if(SuffixTemplate.search("{AdGroupName}")>0)
+{
+  var adgroupIterator = {hasNext:function(){return false}}  
+  if(_ADGROUP_CONTAINS==""&&_CAMPAIGN_CONTAINS=="")
+    {adgroupIterator=AdsApp.adGroups().withCondition("Status = "+STATUS).get();}
+  else if(_ADGROUP_CONTAINS==""&&_CAMPAIGN_CONTAINS!=="")
+    {adgroupIterator=AdsApp.adGroups().withCondition("CampaignName contains '"+_CAMPAIGN_CONTAINS+"'").withCondition("Status = "+STATUS).get();}
+  else if(_ADGROUP_CONTAINS!==""&&_CAMPAIGN_CONTAINS!=="")
+    {adgroupIterator=AdsApp.adGroups().withCondition("CampaignName contains '"+_CAMPAIGN_CONTAINS+"'").withCondition("Name contains '"+_ADGROUP_CONTAINS+"'").withCondition("Status = "+STATUS).get();}
+  else if(_ADGROUP_CONTAINS!==""&&_CAMPAIGN_CONTAINS=="")
+    {adgroupIterator=AdsApp.adGroups().withCondition("Name contains '"+_ADGROUP_CONTAINS+"'").withCondition("Status = "+STATUS).get();}
+
+  if(!adgroupIterator.hasNext()){Logger.log("No Campaigns/Adgroups matched with this condition");return}
+  while(adgroupIterator.hasNext())
+  {   
+    var adgroup=adgroupIterator.next();
+    var adgrouptemplate=SuffixTemplate.replace(/{AdGroupName}/g,adgroup.getName().replace(/\s/g,'%20'))
+    if(SuffixTemplate.search("{CampaignName}")>0) {adgrouptemplate=adgrouptemplate.replace(/{CampaignName}/g,adgroup.getCampaign().getName().replace(/\s/g,'%20'))}
+      adgroup.urls().setFinalUrlSuffix(adgrouptemplate);
+    Logger.log(adgroup.getCampaign().getName()+" => "+adgroup.getName()+" => "+adgrouptemplate)
+  }
+}
+}
